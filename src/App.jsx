@@ -12,7 +12,6 @@ export default function App() {
   const [saleClientId, setSaleClientId] = useState("");
   const [saleQty, setSaleQty] = useState("");
 
-  // Добавление товара
   const addProduct = () => {
     if (!productName || !productQty) return alert("Введите название и количество");
     const newProduct = {
@@ -25,7 +24,6 @@ export default function App() {
     setProductQty("");
   };
 
-  // Добавление клиента
   const addClient = () => {
     if (!clientName) return alert("Введите имя клиента");
     const newClient = {
@@ -36,7 +34,6 @@ export default function App() {
     setClientName("");
   };
 
-  // Добавление продажи
   const addSale = () => {
     if (!saleProductId || !saleClientId || !saleQty)
       return alert("Выберите товар, клиента и количество");
@@ -55,7 +52,7 @@ export default function App() {
     };
 
     setSales([...sales, newSale]);
-    // Обновляем количество товара на складе
+
     setProducts(
       products.map((p) =>
         p.id === saleProductId ? { ...p, qty: p.qty - Number(saleQty) } : p
@@ -68,91 +65,124 @@ export default function App() {
   };
 
   return (
-    <div style={{ padding: 20, fontFamily: "Arial, sans-serif" }}>
-      <h1>CRM — Учёт продаж и склада</h1>
+    <div className="max-w-4xl mx-auto p-6 font-sans">
+      <h1 className="text-3xl font-bold mb-8 text-center">CRM — Учёт продаж и склада</h1>
 
-      <section>
-        <h2>Добавить товар</h2>
-        <input
-          placeholder="Название товара"
-          value={productName}
-          onChange={(e) => setProductName(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Количество"
-          value={productQty}
-          onChange={(e) => setProductQty(e.target.value)}
-        />
-        <button onClick={addProduct}>Добавить товар</button>
+      <section className="mb-10 p-4 bg-white rounded shadow">
+        <h2 className="text-xl font-semibold mb-4">Добавить товар</h2>
+        <div className="flex gap-4">
+          <input
+            className="border rounded px-3 py-2 flex-grow"
+            placeholder="Название товара"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+          />
+          <input
+            type="number"
+            className="border rounded px-3 py-2 w-24"
+            placeholder="Количество"
+            value={productQty}
+            onChange={(e) => setProductQty(e.target.value)}
+          />
+          <button
+            onClick={addProduct}
+            className="bg-blue-600 text-white px-4 rounded hover:bg-blue-700"
+          >
+            Добавить
+          </button>
+        </div>
       </section>
 
-      <section style={{ marginTop: 20 }}>
-        <h2>Добавить клиента</h2>
-        <input
-          placeholder="Имя клиента"
-          value={clientName}
-          onChange={(e) => setClientName(e.target.value)}
-        />
-        <button onClick={addClient}>Добавить клиента</button>
+      <section className="mb-10 p-4 bg-white rounded shadow">
+        <h2 className="text-xl font-semibold mb-4">Добавить клиента</h2>
+        <div className="flex gap-4">
+          <input
+            className="border rounded px-3 py-2 flex-grow"
+            placeholder="Имя клиента"
+            value={clientName}
+            onChange={(e) => setClientName(e.target.value)}
+          />
+          <button
+            onClick={addClient}
+            className="bg-green-600 text-white px-4 rounded hover:bg-green-700"
+          >
+            Добавить
+          </button>
+        </div>
       </section>
 
-      <section style={{ marginTop: 20 }}>
-        <h2>Добавить продажу</h2>
-        <select
-          value={saleProductId}
-          onChange={(e) => setSaleProductId(e.target.value)}
-        >
-          <option value="">Выберите товар</option>
+      <section className="mb-10 p-4 bg-white rounded shadow">
+        <h2 className="text-xl font-semibold mb-4">Добавить продажу</h2>
+        <div className="flex gap-4 items-center flex-wrap">
+          <select
+            className="border rounded px-3 py-2 flex-grow min-w-[180px]"
+            value={saleProductId}
+            onChange={(e) => setSaleProductId(e.target.value)}
+          >
+            <option value="">Выберите товар</option>
+            {products.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name} (в наличии: {p.qty})
+              </option>
+            ))}
+          </select>
+
+          <select
+            className="border rounded px-3 py-2 flex-grow min-w-[180px]"
+            value={saleClientId}
+            onChange={(e) => setSaleClientId(e.target.value)}
+          >
+            <option value="">Выберите клиента</option>
+            {clients.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+
+          <input
+            type="number"
+            className="border rounded px-3 py-2 w-24"
+            placeholder="Количество"
+            value={saleQty}
+            onChange={(e) => setSaleQty(e.target.value)}
+          />
+          <button
+            onClick={addSale}
+            className="bg-purple-600 text-white px-4 rounded hover:bg-purple-700"
+          >
+            Добавить
+          </button>
+        </div>
+      </section>
+
+      <section className="mb-10">
+        <h2 className="text-xl font-semibold mb-4">Товары на складе</h2>
+        <ul className="space-y-2">
           {products.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.name} (в наличии: {p.qty})
-            </option>
-          ))}
-        </select>
-
-        <select
-          value={saleClientId}
-          onChange={(e) => setSaleClientId(e.target.value)}
-        >
-          <option value="">Выберите клиента</option>
-          {clients.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-
-        <input
-          type="number"
-          placeholder="Количество"
-          value={saleQty}
-          onChange={(e) => setSaleQty(e.target.value)}
-        />
-        <button onClick={addSale}>Добавить продажу</button>
-      </section>
-
-      <section style={{ marginTop: 30 }}>
-        <h2>Товары на складе</h2>
-        <ul>
-          {products.map((p) => (
-            <li key={p.id}>
-              {p.name} — {p.qty} шт.
+            <li
+              key={p.id}
+              className="border rounded px-4 py-2 bg-white shadow flex justify-between"
+            >
+              <span>{p.name}</span>
+              <span className="font-semibold">{p.qty} шт.</span>
             </li>
           ))}
         </ul>
       </section>
 
-      <section style={{ marginTop: 30 }}>
-        <h2>Продажи</h2>
-        <ul>
+      <section className="mb-10">
+        <h2 className="text-xl font-semibold mb-4">Продажи</h2>
+        <ul className="space-y-2">
           {sales.map((s) => {
             const product = products.find((p) => p.id === s.productId);
             const client = clients.find((c) => c.id === s.clientId);
             return (
-              <li key={s.id}>
-                {s.date}: Продано {s.qty} шт. товара "{product?.name}" клиенту "
-                {client?.name}"
+              <li
+                key={s.id}
+                className="border rounded px-4 py-2 bg-white shadow"
+              >
+                {s.date}: Продано {s.qty} шт. товара "<strong>{product?.name}</strong>" клиенту "<strong>{client?.name}</strong>"
               </li>
             );
           })}
